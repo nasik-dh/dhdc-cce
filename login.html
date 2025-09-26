@@ -384,13 +384,13 @@
             <div id="statusPage" class="page-content hidden">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="bg-white rounded-lg shadow-lg p-6 status-card">
-                        <h3 class="text-lg font-bold mb-4 text-green-600">Task Progress</h3>
+                        <h3 class="text-lg font-bold mb-4 text-green-600">Work Progress</h3>
                         <div class="chart-container">
                             <canvas id="taskChart"></canvas>
                         </div>
                     </div>
                     <div class="bg-white rounded-lg shadow-lg p-6 status-card">
-                        <h3 class="text-lg font-bold mb-4 text-green-600">Course Progress</h3>
+                        <h3 class="text-lg font-bold mb-4 text-green-600">Practice Progress</h3>
                         <div class="chart-container">
                             <canvas id="courseChart"></canvas>
                         </div>
@@ -406,7 +406,7 @@
                         <div class="space-y-4">
                             <div>
                                 <div class="flex justify-between text-sm text-gray-600 mb-1">
-                                    <span>Tasks Completed</span>
+                                    <span>Works Completed</span>
                                     <span id="taskProgress">0%</span>
                                 </div>
                                 <div class="w-full bg-gray-200 rounded-full h-2">
@@ -415,7 +415,7 @@
                             </div>
                             <div>
                                 <div class="flex justify-between text-sm text-gray-600 mb-1">
-                                    <span>Courses Completed</span>
+                                    <span>Practices Completed</span>
                                     <span id="courseProgressText">0%</span>
                                 </div>
                                 <div class="w-full bg-gray-200 rounded-full h-2">
@@ -493,7 +493,7 @@
     <div class="bg-white rounded-lg shadow-lg p-6">
         <div class="flex justify-between items-center mb-6">
             <h2 class="text-2xl font-bold text-blue-600">
-                <i class="fas fa-tasks mr-2"></i>Task Management
+                <i class="fas fa-tasks mr-2"></i>Works Management
             </h2>
             <div class="flex space-x-4">
                 <select id="adminTaskUserSelect" class="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -514,7 +514,7 @@
                 <!-- Tasks will be loaded here -->
             </div>
             <button onclick="submitTasksForStudent()" class="mt-6 bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition duration-300 w-full">
-                <i class="fas fa-save mr-2"></i>Submit Tasks for Student
+                <i class="fas fa-save mr-2"></i>Submit Works for Student
             </button>
         </div>
         
@@ -531,7 +531,7 @@
     <div class="bg-white rounded-lg shadow-lg p-6">
         <div class="flex justify-between items-center mb-6">
             <h2 class="text-2xl font-bold text-blue-600">
-                <i class="fas fa-book-open mr-2"></i>Course Management
+                <i class="fas fa-book-open mr-2"></i>Practice Management
             </h2>
             <button onclick="showAddCourseModal()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-300">
                 <i class="fas fa-plus mr-2"></i>Add Course
@@ -569,13 +569,13 @@
             <!-- Charts Grid -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-6 mb-4 sm:mb-6">
                 <div class="bg-white rounded-lg shadow p-3 sm:p-6 border">
-                    <h4 class="text-sm sm:text-lg font-bold mb-3 sm:mb-4 text-blue-600">Task Progress</h4>
+                    <h4 class="text-sm sm:text-lg font-bold mb-3 sm:mb-4 text-blue-600">Works Progress</h4>
                     <div class="chart-container">
                         <canvas id="adminTaskChart"></canvas>
                     </div>
                 </div>
                 <div class="bg-white rounded-lg shadow p-3 sm:p-6 border">
-                    <h4 class="text-sm sm:text-lg font-bold mb-3 sm:mb-4 text-blue-600">Course Progress</h4>
+                    <h4 class="text-sm sm:text-lg font-bold mb-3 sm:mb-4 text-blue-600">Practice Progress</h4>
                     <div class="chart-container">
                         <canvas id="adminCourseChart"></canvas>
                     </div>
@@ -589,7 +589,7 @@
                     <div class="space-y-3 sm:space-y-4">
                         <div>
                             <div class="flex justify-between text-xs sm:text-sm text-gray-600 mb-1">
-                                <span>Tasks Completed</span>
+                                <span>Works Completed</span>
                                 <span id="adminTaskProgress">0%</span>
                             </div>
                             <div class="w-full bg-gray-200 rounded-full h-2 sm:h-3">
@@ -601,7 +601,7 @@
                         </div>
                         <div>
                             <div class="flex justify-between text-xs sm:text-sm text-gray-600 mb-1">
-                                <span>Courses Completed</span>
+                                <span>Practices Completed</span>
                                 <span id="adminCourseProgress">0%</span>
                             </div>
                             <div class="w-full bg-gray-200 rounded-full h-2 sm:h-3">
@@ -802,6 +802,7 @@
     <script src="app.js"></script>
 </body>
 </html>
+
 
 
 
