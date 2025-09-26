@@ -581,7 +581,7 @@ async function showPage(page) {
 
     currentPage = page;
 
-    // Load page-specific data
+   // Load page-specific data
     if (page === 'events') {
         currentDate = new Date();
         loadCalendar();
@@ -598,11 +598,11 @@ async function showPage(page) {
     } else if (page === 'adminCourses') {
         loadAdminCourses();
     } else if (page === 'adminStatus') {
-        console.log('Loading admin status page...');
-    } else if (page === 'adminResponse') {
+    console.log('Loading admin status page...');
+    await loadAllUsersStatus(); // Make sure this line has 'await'
+} else if (page === 'adminResponse') {
     loadAdminResponse();
-        await loadAllUsersStatus(); // Fixed: Added await
-    }
+}
 }
 
 // =============================
