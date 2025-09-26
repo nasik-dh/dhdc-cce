@@ -394,23 +394,25 @@ async function login() {
             document.getElementById('welcomeUser').textContent = `Welcome, ${currentUser.name}`;
 
             // Show appropriate navigation based on role
-            if (currentUser.role === 'admin') {
-                document.getElementById('studentNav').classList.add('hidden');
-                document.getElementById('adminNav').classList.remove('hidden');
-                showPage('adminUsers');
-                await loadAdminData();
-            } else {
-                document.getElementById('studentNav').classList.remove('hidden');
-                document.getElementById('adminNav').classList.add('hidden');
-                showPage('tasks');
-                await Promise.all([
-                    loadTasks(),
-                    loadCourses(),
-                    loadEvents(),
-                    loadTimeTable(),
-                    checkOverdueTasks()
-                ]);
-            }
+           // Show appropriate navigation based on role
+if (currentUser.role === 'admin') {
+    document.getElementById('studentNav').classList.add('hidden');
+    document.getElementById('adminNav').classList.remove('hidden');
+    showPage('adminUsers');
+    await loadAdminData();
+} else {
+    document.getElementById('studentNav').classList.remove('hidden');
+    document.getElementById('adminNav').classList.add('hidden');
+    showPage('tasks');
+    await Promise.all([
+        loadTasks(),
+        // loadCourses(),  // COMMENTED OUT - remove this if you don't want courses for students
+        loadEvents(),
+        loadTimeTable(),
+        checkOverdueTasks()
+    ]);
+}
+
             
             hideError();
         } else {
@@ -595,15 +597,13 @@ async function showPage(page) {
         loadAdminEvents();
     } else if (page === 'adminTasks') {
         loadAdminTasks();
-    } else if (page === 'adminCourses') {
-        loadAdminCourses();
     } else if (page === 'adminStatus') {
         console.log('Loading admin status page...');
-    } else if (page === 'adminResponse') {
-    loadAdminResponse();
-        await loadAllUsersStatus(); // Fixed: Added await
+        await loadAllUsersStatus();
     }
+    // REMOVED: adminCourses and adminResponse cases
 }
+
 
 // =============================
 // ✅ Optimized Tasks
@@ -2218,15 +2218,16 @@ async function loadAdminData() {
     try {
         await Promise.all([
             loadAdminUsers(),
-            loadAdminResponse(),  // ADD THIS LINE
+            // loadAdminResponse(),  // REMOVED
             loadAdminEvents(),
-            loadAdminTasks(),
-            loadAdminCourses()
+            loadAdminTasks()
+            // loadAdminCourses()   // REMOVED
         ]);
     } catch (error) {
         console.error('Error loading admin data:', error);
     }
 }
+
 
 // Admin Users Management
 async function loadAdminUsers() {
