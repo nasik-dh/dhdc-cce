@@ -3201,44 +3201,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Add Course Form
-    document.getElementById('addCourseForm').addEventListener('submit', async function(e) {
-        e.preventDefault();
-        
-        const submitBtn = e.target.querySelector('button[type="submit"]');
-        const originalText = submitBtn.innerHTML;
-        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Adding...';
-        submitBtn.disabled = true;
-
-        try {
-            const courseData = [
-                document.getElementById('courseId').value.trim(),
-                document.getElementById('courseTitle').value.trim(),
-                document.getElementById('courseDescription').value.trim(),
-                document.getElementById('courseStep1').value.trim(),
-                document.getElementById('courseStep2').value.trim(),
-                document.getElementById('courseStep3').value.trim(),
-                document.getElementById('courseStep4').value.trim(),
-                document.getElementById('courseStep5').value.trim()
-            ];
-
-            const result = await api.addRow('courses_master', courseData);
-            
-            if (result && (result.success || result.includes?.('Success'))) {
-                alert('Course added successfully!');
-                closeAddCourseModal();
-                await loadAdminCourses();
-            } else {
-                throw new Error(result?.error || 'Failed to add course');
-            }
-        } catch (error) {
-            console.error('Error adding course:', error);
-            alert('Error adding course: ' + error.message);
-        } finally {
-            submitBtn.innerHTML = originalText;
-            submitBtn.disabled = false;
-        }
-    });
+    
 });
 
 // Placeholder functions for edit/delete (you can implement these later)
@@ -3272,15 +3235,6 @@ function deleteTask(taskId) {
     }
 }
 
-function editCourse(courseId) {
-    alert(`Edit course functionality for ${courseId} - To be implemented`);
-}
-
-function deleteCourse(courseId) {
-    if (confirm(`Are you sure you want to delete this course?`)) {
-        alert(`Delete course functionality for ${courseId} - To be implemented`);
-    }
-}
 
 // Disable right-click
 document.addEventListener("contextmenu", function (e) {
