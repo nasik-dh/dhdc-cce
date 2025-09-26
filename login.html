@@ -189,19 +189,24 @@
         <main class="container mx-auto px-2 sm:px-4 py-4 sm:py-8">
             
             <!-- Tasks Page -->
-            <div id="tasksPage" class="page-content">
-                <div class="bg-white rounded-lg shadow-lg p-3 sm:p-6">
-                    <h2 class="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-green-600">
-                        <i class="fas fa-tasks mr-2"></i>My Tasks
-                    </h2>
-                    <div id="tasksList" class="space-y-3 sm:space-y-4">
-                        <!-- Tasks will be loaded dynamically -->
-                    </div>
-                    <button onclick="submitTasks()" class="mt-4 sm:mt-6 bg-green-600 text-white px-4 sm:px-6 py-2 rounded hover:bg-green-700 transition duration-300 w-full sm:w-auto text-sm sm:text-base">
-                        <i class="fas fa-save mr-2"></i>Submit Completed Tasks
-                    </button>
-                </div>
-            </div>
+<div id="tasksPage" class="page-content">
+    <div class="bg-white rounded-lg shadow-lg p-3 sm:p-6">
+        <h2 class="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-green-600">
+            <i class="fas fa-tasks mr-2"></i>My Tasks
+        </h2>
+        <div id="tasksList" class="space-y-3 sm:space-y-4">
+            <!-- Tasks will be loaded dynamically -->
+        </div>
+        <!-- Submit button removed for students -->
+        <div class="mt-4 sm:mt-6 p-3 bg-blue-50 rounded-lg">
+            <p class="text-sm text-blue-600">
+                <i class="fas fa-info-circle mr-2"></i>
+                Tasks are managed by administrators. Contact your instructor if you have completed any pending tasks.
+            </p>
+        </div>
+    </div>
+</div>
+
 
             <!-- Courses Page -->
             <div id="coursesPage" class="page-content hidden">
@@ -492,15 +497,36 @@
             <h2 class="text-2xl font-bold text-blue-600">
                 <i class="fas fa-tasks mr-2"></i>Task Management
             </h2>
-            <button onclick="showAddTaskModal()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-300">
-                <i class="fas fa-plus mr-2"></i>Add Task
+            <div class="flex space-x-4">
+                <select id="adminTaskUserSelect" class="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="">-- Select Student --</option>
+                </select>
+                <button onclick="showAddTaskModal()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-300">
+                    <i class="fas fa-plus mr-2"></i>Add Task
+                </button>
+            </div>
+        </div>
+        
+        <!-- Admin Task Assignment View -->
+        <div id="adminTaskAssignmentView" class="hidden">
+            <div class="mb-4 p-4 bg-blue-50 rounded-lg">
+                <h3 id="selectedStudentInfo" class="text-lg font-semibold text-blue-800"></h3>
+            </div>
+            <div id="adminTasksList" class="space-y-3">
+                <!-- Tasks will be loaded here -->
+            </div>
+            <button onclick="submitTasksForStudent()" class="mt-6 bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition duration-300 w-full">
+                <i class="fas fa-save mr-2"></i>Submit Tasks for Student
             </button>
         </div>
-        <div id="adminTasksList" class="space-y-4">
-            <!-- Tasks list will be loaded here -->
+        
+        <!-- Default Admin Task List -->
+        <div id="adminTasksDefaultList" class="space-y-4">
+            <!-- Default tasks list will be loaded here -->
         </div>
     </div>
 </div>
+
 
 <!-- Admin Courses Page -->
 <div id="adminCoursesPage" class="page-content hidden">
@@ -778,4 +804,5 @@
     <script src="app.js"></script>
 </body>
 </html>
+
 
