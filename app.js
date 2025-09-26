@@ -1028,7 +1028,7 @@ const videoCourses = [
         videos: [
             {
                 title: 'Video 1',
-                url: 'https://www.youtube.com/embed/VIDEO_ID_1'
+                url: 'https://www.youtube.com/embed/zalLv2NY98k'
             },
             {
                 title: 'Video 2', 
