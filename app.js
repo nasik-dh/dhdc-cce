@@ -406,12 +406,14 @@ if (currentUser.role === 'admin') {
     showPage('tasks');
     await Promise.all([
         loadTasks(),
-        // loadCourses(),  // COMMENTED OUT - remove this if you don't want courses for students
+        loadCourses(),
         loadEvents(),
         loadTimeTable(),
         checkOverdueTasks()
     ]);
 }
+
+
 
             
             hideError();
@@ -600,8 +602,8 @@ async function showPage(page) {
     } else if (page === 'adminStatus') {
         console.log('Loading admin status page...');
         await loadAllUsersStatus();
-    }
-    // REMOVED: adminCourses and adminResponse cases
+    } } else if (page ===} else if (page === 'adminResponse') {
+    loadAdminResponse();
 }
 
 
@@ -2218,15 +2220,15 @@ async function loadAdminData() {
     try {
         await Promise.all([
             loadAdminUsers(),
-            // loadAdminResponse(),  // REMOVED
+            loadAdminResponse(),
             loadAdminEvents(),
             loadAdminTasks()
-            // loadAdminCourses()   // REMOVED
         ]);
     } catch (error) {
         console.error('Error loading admin data:', error);
     }
 }
+
 
 
 // Admin Users Management
