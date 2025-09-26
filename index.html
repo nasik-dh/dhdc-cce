@@ -923,10 +923,11 @@
                 // Create fallback icon if logo fails to load
                 const fallback = document.createElement('div');
                 fallback.className = 'w-12 h-12 bg-gradient-to-br from-blue-600 to-green-600 rounded-lg flex items-center justify-content-center';
-                fallback.innerHTML = '<i class="fas fa-university text-white text-lg"></i>';
+                
                 this.parentNode.replaceChild(fallback, this);
             });
         });
     </script>
 </body>
 </html>
+
