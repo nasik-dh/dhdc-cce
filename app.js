@@ -608,6 +608,7 @@ async function showPage(page) {
 // =============================
 // ✅ Optimized Tasks
 // =============================
+// Updated loadTasks function (remove submit functionality for students)
 async function loadTasks() {
     const tasksContainer = document.getElementById('tasksList');
     
@@ -641,34 +642,29 @@ async function loadTasks() {
             
             // Check if task is overdue
             const dueDate = new Date(task.due_date);
-            dueDate.setHours(23, 59, 59, 999); // End of due date
+            dueDate.setHours(23, 59, 59, 999);
             const isOverdue = !completed && dueDate < today;
             const isDueToday = !completed && dueDate.toDateString() === today.toDateString();
-            const isDueSoon = !completed && dueDate > today && dueDate <= new Date(today.getTime() + (3 * 24 * 60 * 60 * 1000)); // Due within 3 days
+            const isDueSoon = !completed && dueDate > today && dueDate <= new Date(today.getTime() + (3 * 24 * 60 * 60 * 1000));
 
             const taskElement = document.createElement('div');
-            let containerClass = 'flex items-start space-x-3 p-4 border rounded-lg transition-colors';
+            let containerClass = 'flex items-start space-x-3 p-4 border rounded-lg';
             let statusIndicator = '';
-            let checkboxDisabled = '';
-            let checkboxClass = 'mt-1 w-5 h-5 text-green-600 rounded focus:ring-green-500';
             
             if (completed) {
-                containerClass += ' bg-green-50 border-green-200 hover:bg-green-100';
+                containerClass += ' bg-green-50 border-green-200';
                 statusIndicator = '<span class="text-xs text-green-600 font-medium">✓ Completed</span>';
-                checkboxDisabled = 'disabled';
             } else if (isOverdue) {
-                containerClass += ' bg-red-50 border-red-300 opacity-75';
-                statusIndicator = '<span class="text-xs text-red-600 font-medium">⚠ Overdue - Cannot Complete</span>';
-                checkboxDisabled = 'disabled';
-                checkboxClass += ' cursor-not-allowed opacity-50';
+                containerClass += ' bg-red-50 border-red-300';
+                statusIndicator = '<span class="text-xs text-red-600 font-medium">⚠ Overdue</span>';
             } else if (isDueToday) {
-                containerClass += ' bg-yellow-50 border-yellow-300 hover:bg-yellow-100';
+                containerClass += ' bg-yellow-50 border-yellow-300';
                 statusIndicator = '<span class="text-xs text-yellow-600 font-medium">Due Today</span>';
             } else if (isDueSoon) {
-                containerClass += ' bg-blue-50 border-blue-200 hover:bg-blue-100';
+                containerClass += ' bg-blue-50 border-blue-200';
                 statusIndicator = '<span class="text-xs text-blue-600 font-medium">Due Soon</span>';
             } else {
-                containerClass += ' hover:bg-gray-50';
+                containerClass += ' bg-gray-50';
             }
             
             taskElement.className = containerClass;
@@ -679,10 +675,14 @@ async function loadTasks() {
                 day: 'numeric'
             });
             
+            // Remove checkbox for students - display only
             taskElement.innerHTML = `
-                <input type="checkbox" id="task-${task.task_id}" ${completed ? 'checked' : ''} 
-                       class="${checkboxClass}" ${checkboxDisabled}
-                       ${isOverdue ? 'title="This task is overdue and cannot be completed"' : ''}>
+                <div class="flex-shrink-0 mt-1">
+                    ${completed ? 
+                        '<i class="fas fa-check-circle text-green-600 text-xl"></i>' : 
+                        '<i class="fas fa-clock text-gray-400 text-xl"></i>'
+                    }
+                </div>
                 <div class="flex-1">
                     <h4 class="font-semibold ${completed ? 'line-through text-gray-500' : isOverdue ? 'text-red-700' : ''}">${task.title}</h4>
                     <p class="text-gray-600 text-sm ${completed ? 'line-through' : isOverdue ? 'text-red-600' : ''}">${task.description}</p>
@@ -691,7 +691,7 @@ async function loadTasks() {
                         ${isOverdue ? ' (OVERDUE)' : isDueToday ? ' (TODAY)' : ''}
                     </p>
                     ${statusIndicator}
-                    ${isOverdue ? '<p class="text-xs text-red-500 mt-1 italic">Contact administrator to extend deadline</p>' : ''}
+                    ${isOverdue ? '<p class="text-xs text-red-500 mt-1 italic">This task is overdue</p>' : ''}
                 </div>
             `;
             fragment.appendChild(taskElement);
@@ -699,14 +699,12 @@ async function loadTasks() {
 
         tasksContainer.appendChild(fragment);
         
-        // Add overdue tasks summary
-        setTimeout(() => showOverdueTasksSummary(), 100);
-        
     } catch (error) {
         console.error('Error loading tasks:', error);
         tasksContainer.innerHTML = '<p class="text-red-500">Error loading tasks.</p>';
     }
 }
+
 
 async function submitTasks() {
     const submitBtn = event.target;
@@ -3280,6 +3278,265 @@ function deleteCourse(courseId) {
         alert(`Delete course functionality for ${courseId} - To be implemented`);
     }
 }
+
+// Load admin tasks with dropdown functionality
+async function loadAdminTasks() {
+    const container = document.getElementById('adminTasksDefaultList');
+    container.innerHTML = '<div class="text-center py-4"><i class="fas fa-spinner fa-spin mr-2"></i>Loading tasks...</div>';
+
+    try {
+        // Load students dropdown
+        await loadTaskStudentsDropdown();
+        
+        const tasks = await api.getSheet("tasks_master");
+        
+        if (!tasks || tasks.length === 0) {
+            container.innerHTML = '<p class="text-gray-500">No tasks found.</p>';
+            return;
+        }
+
+        container.innerHTML = tasks.map(task => `
+            <div class="bg-gray-50 rounded-lg p-4 flex justify-between items-start">
+                <div class="flex-1">
+                    <h4 class="font-semibold text-gray-800">${task.title}</h4>
+                    <p class="text-sm text-gray-600">${task.description}</p>
+                    <div class="mt-2">
+                        <p class="text-xs text-gray-500"><i class="fas fa-calendar-alt mr-1"></i>Due: ${new Date(task.due_date).toLocaleDateString()}</p>
+                        <p class="text-xs text-gray-500"><i class="fas fa-tag mr-1"></i>ID: ${task.task_id}</p>
+                    </div>
+                </div>
+                <div class="flex space-x-2 ml-4">
+                    <button onclick="editTask('${task.task_id}')" class="text-blue-600 hover:text-blue-800">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button onclick="deleteTask('${task.task_id}')" class="text-red-600 hover:text-red-800">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        `).join('');
+    } catch (error) {
+        console.error('Error loading tasks:', error);
+        container.innerHTML = '<p class="text-red-500">Error loading tasks.</p>';
+    }
+}
+
+// Load students dropdown for task assignment
+async function loadTaskStudentsDropdown() {
+    try {
+        const users = await api.getSheet("user_credentials", false);
+        const userSelect = document.getElementById('adminTaskUserSelect');
+        
+        if (!users || !Array.isArray(users) || users.length === 0) {
+            userSelect.innerHTML = '<option value="">-- No Students Found --</option>';
+            return;
+        }
+        
+        userSelect.innerHTML = '<option value="">-- Select Student --</option>';
+        
+        // Filter and add only students (non-admin users)
+        users.forEach(user => {
+            if (user.username && user.username.trim() && user.role !== 'admin') {
+                const username = user.username.trim();
+                const displayName = user.full_name || username;
+                
+                const option = document.createElement('option');
+                option.value = username;
+                option.textContent = `${displayName} (@${username})`;
+                userSelect.appendChild(option);
+            }
+        });
+        
+        // Add event listener for student selection
+        userSelect.onchange = handleTaskStudentSelection;
+        
+    } catch (error) {
+        console.error('Error loading students dropdown:', error);
+        document.getElementById('adminTaskUserSelect').innerHTML = '<option value="">-- Error Loading Students --</option>';
+    }
+}
+
+// Handle student selection for task assignment
+async function handleTaskStudentSelection(event) {
+    const selectedUsername = event.target.value;
+    const assignmentView = document.getElementById('adminTaskAssignmentView');
+    const defaultList = document.getElementById('adminTasksDefaultList');
+    
+    if (!selectedUsername) {
+        assignmentView.classList.add('hidden');
+        defaultList.classList.remove('hidden');
+        return;
+    }
+    
+    defaultList.classList.add('hidden');
+    assignmentView.classList.remove('hidden');
+    
+    // Update selected student info
+    const users = await api.getSheet("user_credentials");
+    const selectedUser = users.find(u => u.username === selectedUsername);
+    document.getElementById('selectedStudentInfo').textContent = 
+        `Assigning tasks for: ${selectedUser?.full_name || selectedUsername} (@${selectedUsername})`;
+    
+    // Load tasks for assignment
+    await loadTasksForAssignment(selectedUsername);
+}
+
+// Load tasks for assignment to selected student
+async function loadTasksForAssignment(username) {
+    const container = document.getElementById('adminTasksList');
+    container.innerHTML = '<div class="text-center py-4"><i class="fas fa-spinner fa-spin mr-2"></i>Loading tasks...</div>';
+
+    try {
+        const [tasks, progress] = await Promise.all([
+            api.getSheet("tasks_master"),
+            api.getSheet(`${username}_progress`)
+        ]);
+        
+        if (!tasks || tasks.length === 0) {
+            container.innerHTML = '<p class="text-gray-500">No tasks found.</p>';
+            return;
+        }
+
+        const fragment = document.createDocumentFragment();
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        tasks.forEach(task => {
+            const userTask = progress.find(p => 
+                String(p.item_id) === String(task.task_id) && 
+                p.item_type === "task" && 
+                p.status === "complete"
+            );
+            const completed = !!userTask;
+            
+            // Check if task is overdue
+            const dueDate = new Date(task.due_date);
+            dueDate.setHours(23, 59, 59, 999);
+            const isOverdue = !completed && dueDate < today;
+            
+            const taskElement = document.createElement('div');
+            let containerClass = 'flex items-start space-x-3 p-4 border rounded-lg transition-colors';
+            let statusIndicator = '';
+            let checkboxDisabled = '';
+            let checkboxClass = 'mt-1 w-5 h-5 text-blue-600 rounded focus:ring-blue-500';
+            
+            if (completed) {
+                containerClass += ' bg-green-50 border-green-200';
+                statusIndicator = '<span class="text-xs text-green-600 font-medium">✓ Completed</span>';
+                checkboxDisabled = 'disabled';
+            } else if (isOverdue) {
+                containerClass += ' bg-red-50 border-red-300';
+                statusIndicator = '<span class="text-xs text-red-600 font-medium">⚠ Overdue</span>';
+            } else {
+                containerClass += ' hover:bg-gray-50';
+            }
+            
+            taskElement.className = containerClass;
+            
+            const dueDateFormatted = new Date(task.due_date).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+            
+            taskElement.innerHTML = `
+                <input type="checkbox" id="admin-task-${task.task_id}" ${completed ? 'checked' : ''} 
+                       class="${checkboxClass}" ${checkboxDisabled}>
+                <div class="flex-1">
+                    <h4 class="font-semibold ${completed ? 'line-through text-gray-500' : ''}">${task.title}</h4>
+                    <p class="text-gray-600 text-sm ${completed ? 'line-through' : ''}">${task.description}</p>
+                    <p class="text-xs ${isOverdue ? 'text-red-500 font-medium' : 'text-gray-400'}">
+                        Due: ${dueDateFormatted}
+                        ${isOverdue ? ' (OVERDUE)' : ''}
+                    </p>
+                    ${statusIndicator}
+                </div>
+            `;
+            fragment.appendChild(taskElement);
+        });
+
+        container.innerHTML = '';
+        container.appendChild(fragment);
+        
+    } catch (error) {
+        console.error('Error loading tasks for assignment:', error);
+        container.innerHTML = '<p class="text-red-500">Error loading tasks.</p>';
+    }
+}
+
+// Submit tasks for selected student (admin function)
+async function submitTasksForStudent() {
+    const userSelect = document.getElementById('adminTaskUserSelect');
+    const selectedUsername = userSelect.value;
+    
+    if (!selectedUsername) {
+        alert('No student selected.');
+        return;
+    }
+
+    const submitBtn = event.target;
+    const originalText = submitBtn.innerHTML;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Updating...';
+    submitBtn.disabled = true;
+
+    try {
+        // Get selected tasks
+        const selectedTasks = [];
+        document.querySelectorAll('input[id^="admin-task-"]:checked:not(:disabled)').forEach(checkbox => {
+            const taskId = checkbox.id.replace('admin-task-', '');
+            selectedTasks.push(taskId);
+        });
+
+        if (selectedTasks.length === 0) {
+            alert('No new tasks were selected for submission.');
+            return;
+        }
+
+        const [tasks, progress] = await Promise.all([
+            api.getSheet("tasks_master"),
+            api.getSheet(`${selectedUsername}_progress`)
+        ]);
+        
+        const promises = [];
+        let updatedCount = 0;
+
+        for (let taskId of selectedTasks) {
+            const existingTask = progress.find(p => 
+                String(p.item_id) === String(taskId) && 
+                p.item_type === "task" && 
+                p.status === "complete"
+            );
+            
+            if (!existingTask) {
+                const rowData = [
+                    taskId,
+                    "task",
+                    "complete",
+                    new Date().toISOString().split('T')[0],
+                    "100"
+                ];
+                
+                promises.push(api.addRow(`${selectedUsername}_progress`, rowData));
+                updatedCount++;
+            }
+        }
+
+        if (promises.length > 0) {
+            await Promise.all(promises);
+            alert(`${updatedCount} task(s) submitted successfully for ${selectedUsername}!`);
+            await loadTasksForAssignment(selectedUsername);
+        } else {
+            alert('All selected tasks are already completed.');
+        }
+    } catch (error) {
+        console.error('Error submitting tasks:', error);
+        alert('Error updating tasks. Please try again.');
+    } finally {
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+    }
+}
+
 
 // Disable right-click
 document.addEventListener("contextmenu", function (e) {
