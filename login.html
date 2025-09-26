@@ -444,23 +444,7 @@
     </div>
 </div>
 
-<!-- Admin Response Page -->
-<div id="adminResponsePage" class="page-content hidden">
-    <div class="bg-white rounded-lg shadow-lg p-3 sm:p-6">
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 sm:mb-6 space-y-3 sm:space-y-0">
-            <h2 class="text-xl sm:text-2xl font-bold text-blue-600">
-                <i class="fas fa-clipboard-list mr-2"></i>Registration Responses
-            </h2>
-            <div class="flex items-center space-x-2 text-sm text-gray-600">
-                <i class="fas fa-info-circle"></i>
-                <span>Total Responses: <span id="responseCount">0</span></span>
-            </div>
-        </div>
-        <div id="responsesList" class="overflow-x-auto">
-            <!-- Responses will be loaded here -->
-        </div>
-    </div>
-</div>
+
 
 <!-- Admin Events Page -->
 <div id="adminEventsPage" class="page-content hidden">
@@ -496,22 +480,7 @@
     </div>
 </div>
 
-<!-- Admin Courses Page -->
-<div id="adminCoursesPage" class="page-content hidden">
-    <div class="bg-white rounded-lg shadow-lg p-6">
-        <div class="flex justify-between items-center mb-6">
-            <h2 class="text-2xl font-bold text-blue-600">
-                <i class="fas fa-book-open mr-2"></i>Course Management
-            </h2>
-            <button onclick="showAddCourseModal()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-300">
-                <i class="fas fa-plus mr-2"></i>Add Course
-            </button>
-        </div>
-        <div id="adminCoursesList" class="space-y-4">
-            <!-- Courses list will be loaded here -->
-        </div>
-    </div>
-</div>
+
 
 <!-- Admin Status Page -->
 <!-- Admin Status Page -->
@@ -714,63 +683,12 @@
     </div>
 </div>
 
-<!-- Add Course Modal -->
-<div id="addCourseModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50 p-4">
-    <div class="bg-white rounded-lg shadow-xl max-w-lg w-full max-h-90vh overflow-y-auto">
-        <div class="p-6">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl font-bold text-blue-600">Add New Course</h3>
-                <button onclick="closeAddCourseModal()" class="text-gray-500 hover:text-gray-700">
-                    <i class="fas fa-times text-lg"></i>
-                </button>
-            </div>
-            <form id="addCourseForm" class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Course ID *</label>
-                    <input type="text" id="courseId" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., COURSE001">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Title *</label>
-                    <input type="text" id="courseTitle" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Description *</label>
-                    <textarea id="courseDescription" required rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
-                </div>
-                <div class="grid grid-cols-1 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Step 1 Content *</label>
-                        <textarea id="courseStep1" required rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Step 2 Content *</label>
-                        <textarea id="courseStep2" required rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Step 3 Content *</label>
-                        <textarea id="courseStep3" required rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Step 4 Content *</label>
-                        <textarea id="courseStep4" required rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Step 5 Content *</label>
-                        <textarea id="courseStep5" required rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
-                    </div>
-                </div>
-                <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300">
-                    <i class="fas fa-plus mr-2"></i>Add Course
-                </button>
-            </form>
-        </div>
-    </div>
-</div>
 
         </main>
     </div>
     <script src="app.js"></script>
 </body>
 </html>
+
 
 
